@@ -24,8 +24,13 @@ function renderizarProductos() {
 
 //FUNCIÓN PARA AÑADIR EL PRODUCTO AL CARRITO QUE A LA VEZ LLAMA A LA FUNCION QUE MUESTRA LOS PRODUCTOS EN EL CARRITO
 function agregarProductoAlCarrito(e) {
-    const producto = productos.find(producto => producto.ids.toString() === e.target.id )
-    carrito.push(producto);
+    let productoSeleccionado = productos.find(producto => producto.ids == e.target.id)
+    const productFound = carrito.find(prod => prod.ids == productoSeleccionado.ids)
+    if(productFound) {
+        carrito[carrito.indexOf(productFound)].cantidad += 1
+    } else {
+        carrito.push({...productoSeleccionado, cantidad: 1})
+    }
     console.log("carrito: ", carrito)
     renderizarCarrito();
 }
@@ -35,36 +40,39 @@ function renderizarCarrito() {
     // let productosSeleccionados = productos.filter(producto => carrito.includes(producto.ids.toString()))
     
     let misProductos = document.getElementById("misProductos")
-    var cardProducto = document.createElement("div")
+   
+   
     // let miCarrito = document.getElementById("miCarrito")
     // let carritoVacio = document.getElementById("carritoVacio")
+    misProductos.textContent = '';
 
-    carrito.forEach(mostrar);
-
-    function mostrar(productoSeleccionado) {
-
+    carrito.forEach(producto => {
+        let cardProducto = document.createElement("div")
+        cardProducto.id = "item"
         cardProducto.innerHTML =
             `
-                        <div> 
-                        <img class="imagenCarrito" src="${productoSeleccionado.imagen}" alt=${productoSeleccionado.nombre}>
-                        <div>
-                        <p>${productoSeleccionado.nombre}</p>
-                        <p>$${productoSeleccionado.precio}</p>
-                        </div>
-                        <img src="imagenes/eliminar.jpg" width="30px" id="${productoSeleccionado.ids}">
-                        </div>
-                        `;
+            <img class="imagenCarrito" src="${producto.imagen}" alt=${producto.nombre}>
+            <div>
+            <p>${producto.nombre}</p>
+            <p>$${producto.precio}</p>
+            <p>Cantidad:${producto.cantidad}</p>
+            </div>
+            <img src="imagenes/eliminar.jpg" width="30px" id="${producto.ids}">
+            `;
+            misProductos.appendChild(cardProducto);
+            let botonEliminar = document.getElementById(producto.ids);
+            botonEliminar.addEventListener("click", borrarItemCarrito);
+    });    
+   
+}
 
-        misProductos.appendChild(cardProducto);
-
-        let botonEliminar = document.getElementById(productoSeleccionado.ids);
-        botonEliminar.addEventListener("click", borrarItemCarrito);
-
-        function borrarItemCarrito(e) {
-            console.log("e.target.parentElement: ", e.target.parentElement )
-            e.target.parentElement.remove()                  
-        }
-    }
+function borrarItemCarrito(e) {
+    console.log("e.target.parentElement: ", e.target.parentElement )
+    // remove element from carrito 
+    let productoEliminado = carrito.find(producto => producto.ids == e.target.id)
+    carrito.splice(carrito.indexOf(productoEliminado), 1)
+    renderizarCarrito();   
+    //e.target.parentElement.remove()                  
 }
 
 fetch("json/productos.json")
