@@ -31,48 +31,74 @@ function agregarProductoAlCarrito(e) {
     } else {
         carrito.push({...productoSeleccionado, cantidad: 1})
     }
-    console.log("carrito: ", carrito)
     renderizarCarrito();
 }
 
 function renderizarCarrito() {
-    //Array de los productos añadidos al carrito
-    // let productosSeleccionados = productos.filter(producto => carrito.includes(producto.ids.toString()))
-    
+     
     let misProductos = document.getElementById("misProductos")
-   
-   
-    // let miCarrito = document.getElementById("miCarrito")
-    // let carritoVacio = document.getElementById("carritoVacio")
     misProductos.textContent = '';
+    if(carrito.length === 0) {
+        misProductos.innerHTML = `<p>Carrito vacío</p>`
+    } else {
+        carrito.forEach(producto => {
+            let cardProducto = document.createElement("div")
+            cardProducto.id = "item"
+            cardProducto.innerHTML =
+                `
+                <img class="imagenCarrito" src="${producto.imagen}" alt=${producto.nombre}>
+                <div>
+                <p>${producto.nombre}</p>
+                <p>$${producto.precio}</p>
+                <p>Cantidad:${producto.cantidad}</p>
+                </div>
+                <img src="imagenes/eliminar.jpg" width="30px" id="${producto.ids}">
+                <img src="imagenes/agregar.png" width="30px" id="agregar-${producto.ids}">
+                <img src="imagenes/reducir.png" width="30px" id="reducir-${producto.ids}">
+                `;
 
-    carrito.forEach(producto => {
-        let cardProducto = document.createElement("div")
-        cardProducto.id = "item"
-        cardProducto.innerHTML =
-            `
-            <img class="imagenCarrito" src="${producto.imagen}" alt=${producto.nombre}>
-            <div>
-            <p>${producto.nombre}</p>
-            <p>$${producto.precio}</p>
-            <p>Cantidad:${producto.cantidad}</p>
-            </div>
-            <img src="imagenes/eliminar.jpg" width="30px" id="${producto.ids}">
-            `;
-            misProductos.appendChild(cardProducto);
-            let botonEliminar = document.getElementById(producto.ids);
-            botonEliminar.addEventListener("click", borrarItemCarrito);
-    });    
-   
+
+
+                misProductos.appendChild(cardProducto);
+
+                let botonAgregar = document.getElementById(`agregar-${producto.ids}`);
+                botonAgregar.addEventListener("click", function() {
+                    let productFound = carrito.find(prod => prod.ids == producto.ids)
+                    productFound.cantidad += 1
+                    renderizarCarrito()
+                })
+                let botonReducir = document.getElementById(`reducir-${producto.ids}`);
+                botonReducir.addEventListener("click", function() {
+                    let productFound = carrito.find(prod => prod.ids == producto.ids)
+                    if(productFound.cantidad > 1) {
+                    productFound.cantidad -= 1
+                    renderizarCarrito()
+                    }
+                })
+                let botonEliminar = document.getElementById(producto.ids);
+                botonEliminar.addEventListener("click", borrarItemCarrito);
+        });
+        // create total element
+        let total = document.createElement("div");
+        total.id = "total";
+        total.innerHTML = `
+        <p>Total: ${divisa}${calcularTotal()}</p>
+        <input type="button" value="COMPRAR">
+        `;
+        misProductos.appendChild(total);
+    }
 }
-
+function calcularTotal () {
+    let total = 0;
+    for (const producto of carrito) {
+        total += producto.precio * producto.cantidad;
+    }
+    return total;
+}
 function borrarItemCarrito(e) {
-    console.log("e.target.parentElement: ", e.target.parentElement )
-    // remove element from carrito 
     let productoEliminado = carrito.find(producto => producto.ids == e.target.id)
     carrito.splice(carrito.indexOf(productoEliminado), 1)
     renderizarCarrito();   
-    //e.target.parentElement.remove()                  
 }
 
 fetch("json/productos.json")
