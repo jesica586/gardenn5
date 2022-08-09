@@ -1,5 +1,5 @@
 let productos = [];
-let carrito = [];
+let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 let divisa = "$";
 
 function renderizarProductos() {
@@ -23,53 +23,54 @@ function renderizarProductos() {
 function agregarProductoAlCarrito(e) {
     let productoSeleccionado = productos.find(producto => producto.ids == e.target.id)
     const productFound = carrito.find(prod => prod.ids == productoSeleccionado.ids)
-    if(productFound) {
+    if (productFound) {
         carrito[carrito.indexOf(productFound)].cantidad += 1
     } else {
-        carrito.push({...productoSeleccionado, cantidad: 1})
+        carrito.push({ ...productoSeleccionado, cantidad: 1 })
     }
     mostrarToast(productoSeleccionado.nombre)
+    localStorage.setItem("carrito", JSON.stringify(carrito))
     renderizarCarrito();
 }
 
-
-
 function renderizarCarrito() {
-    
     let misProductos = document.getElementById("misProductos")
     misProductos.textContent = '';
-    if(carrito.length === 0) {
-        misProductos.innerHTML = `<p>Carrito vacío</p>`
+    if (carrito.length === 0) {
+        misProductos.innerHTML = `<p>CARRITO VACÍO</p>`
     } else {
         carrito.forEach(producto => {
             let cardProducto = document.createElement("div")
             cardProducto.id = "item"
             cardProducto.innerHTML =
-            `
+                `
             <img class="imagenCarrito" src="${producto.imagen}" alt=${producto.nombre}>
-            <div>
-            <p>${producto.nombre}</p>
-            <p>$${producto.precio}</p>
-            <p>Cantidad:${producto.cantidad}</p>
+            <div class="cartNombreYPrecio">
+            <p class="cartNombre">${producto.nombre}</p>
+            <p class="cartPrecio">$${producto.precio}</p>
+            <div class="cartCantidad">
+            <p class="tituloCantidad">Cantidad:${producto.cantidad}</p>
+            <p class="cartCantidad" id="agregar-${producto.ids}">+</p>
+            <p class="cartCantidad" id="reducir-${producto.ids}">-</p>
             </div>
-            <img src="imagenes/eliminar.jpg" width="30px" id="${producto.ids}">
-            <img src="imagenes/agregar.png" width="30px" id="agregar-${producto.ids}">
-            <img src="imagenes/reducir.png" width="30px" id="reducir-${producto.ids}">
+            </div>
+            <img class="cartEliminar" src="imagenes/eliminar.jpg" id="${producto.ids}">
             `;
-            
+
             misProductos.appendChild(cardProducto);
-            
+
             let botonAgregar = document.getElementById(`agregar-${producto.ids}`);
-            botonAgregar.addEventListener("click", function() {
-                    let productFound = carrito.find(prod => prod.ids == producto.ids)
-                    productFound.cantidad += 1
-                    renderizarCarrito()
-                    mostrarToast(productFound.nombre)
-                })
-                let botonReducir = document.getElementById(`reducir-${producto.ids}`);
-                botonReducir.addEventListener("click", function() {
-                    let productFound = carrito.find(prod => prod.ids == producto.ids)
-                    if(productFound.cantidad > 1) {
+            botonAgregar.addEventListener("click", function () {
+                let productFound = carrito.find(prod => prod.ids == producto.ids)
+                productFound.cantidad += 1
+                renderizarCarrito()
+                mostrarToast(productFound.nombre)
+                localStorage.setItem("carrito", JSON.stringify(carrito))
+            })
+            let botonReducir = document.getElementById(`reducir-${producto.ids}`);
+            botonReducir.addEventListener("click", function () {
+                let productFound = carrito.find(prod => prod.ids == producto.ids)
+                if (productFound.cantidad > 1) {
                     productFound.cantidad -= 1
                     renderizarCarrito()
                     Toastify({
@@ -80,11 +81,11 @@ function renderizarCarrito() {
                             background: "#141414",
                         }
                     }).showToast();
-                    }
-                })
-                let botonEliminar = document.getElementById(producto.ids);
-                botonEliminar.addEventListener("click", borrarItemCarrito);
-
+                }
+                localStorage.setItem("carrito", JSON.stringify(carrito))
+            })
+            let botonEliminar = document.getElementById(producto.ids);
+            botonEliminar.addEventListener("click", borrarItemCarrito);
         });
 
         let total = document.createElement("div");
@@ -96,26 +97,29 @@ function renderizarCarrito() {
         misProductos.appendChild(total);
 
         botonTotal = document.getElementById("botonTotal");
-        botonTotal.addEventListener("click", function(){
-            
+        botonTotal.addEventListener("click", function () {
+
             Swal.fire({
-                title:"GRACIAS POR TU COMPRA!",
-                confirmButtonText:"ACEPTAR"
+                title: "GRACIAS POR TU COMPRA!",
+                confirmButtonText: "ACEPTAR"
             })
         })
     }
 }
-function calcularTotal () {
+
+function calcularTotal() {
     let total = 0;
     for (const producto of carrito) {
         total += producto.precio * producto.cantidad;
     }
     return total;
+
 }
 function borrarItemCarrito(e) {
     let productoEliminado = carrito.find(producto => producto.ids == e.target.id)
     carrito.splice(carrito.indexOf(productoEliminado), 1)
-    renderizarCarrito();   
+    renderizarCarrito();
+    localStorage.setItem("carrito", JSON.stringify(carrito))
 }
 
 function mostrarToast(nombre) {
@@ -135,4 +139,3 @@ fetch("json/productos.json")
         renderizarProductos();
         renderizarCarrito();
     })
-
