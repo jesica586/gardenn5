@@ -9,20 +9,20 @@ function renderizarProductos() {
         card.innerHTML = `
         <div class='card-body'> 
         <img src= "${producto.imagen}" class='imagen' alt='${producto.nombre}'> 
-        <h5 class='nombreProducto'>${producto.nombre}</h5> 
-        <p class='precio'>$${producto.precio}</p>
-        <input class='boton' id='${producto.ids}' type='button' value='COMPRAR'>
+        <h5 class='nombreProducto'>${producto.nombre}</h5>
+        <p class='precio'>$${producto.precio.toLocaleString('de-DE')}</p>
+        <input class='botonComprar' id='${producto.id}' type='button' value='COMPRAR'>
         </div>`;
         seccionProductos.appendChild(card);
 
-        let botones = document.getElementById(producto.ids);
+        let botones = document.getElementById(producto.id);
         botones.addEventListener("click", agregarProductoAlCarrito);
     }
 }
 
 function agregarProductoAlCarrito(e) {
-    let productoSeleccionado = productos.find(producto => producto.ids == e.target.id)
-    const productFound = carrito.find(prod => prod.ids == productoSeleccionado.ids)
+    let productoSeleccionado = productos.find(producto => producto.id == e.target.id)
+    const productFound = carrito.find(prod => prod.id == productoSeleccionado.id)
     if (productFound) {
         carrito[carrito.indexOf(productFound)].cantidad += 1
     } else {
@@ -44,32 +44,35 @@ function renderizarCarrito() {
             cardProducto.id = "item"
             cardProducto.innerHTML =
                 `
-            <img class="imagenCarrito" src="${producto.imagen}" alt=${producto.nombre}>
-            <div class="cartNombreYPrecio">
-            <p class="cartNombre">${producto.nombre}</p>
-            <p class="cartPrecio">$${producto.precio}</p>
-            <div class="cartCantidad">
-            <p class="tituloCantidad">Cantidad:${producto.cantidad}</p>
-            <p class="cartCantidad" id="agregar-${producto.ids}">+</p>
-            <p class="cartCantidad" id="reducir-${producto.ids}">-</p>
+            <img class="imagenCarrito" src="${producto.imagen}" alt="${producto.nombre}">
+            <div class="cartNombreYCantidad">
+                <p class="cartNombre">${producto.nombre}</p>
+                <div>
+                    <p class="tituloCantidad">Cantidad: </p>
+                    <span class="cartBoton" id="reducir-${producto.id}">-</span>
+                    <span class="nroCantidad">${producto.cantidad}</span> 
+                    <span class="cartBoton" id="agregar-${producto.id}">+</span>
+                    </div>
+                </div>
+            <div class="cartEliminarYPrecio">
+                <img class="botonEliminar" src="imagenes/eliminar.jpg" id="${producto.id}">
+                <p class="cartPrecio">$${producto.precio.toLocaleString('de-DE')}</p>
             </div>
-            </div>
-            <img class="cartEliminar" src="imagenes/eliminar.jpg" id="${producto.ids}">
             `;
 
             misProductos.appendChild(cardProducto);
 
-            let botonAgregar = document.getElementById(`agregar-${producto.ids}`);
+            let botonAgregar = document.getElementById(`agregar-${producto.id}`);
             botonAgregar.addEventListener("click", function () {
-                let productFound = carrito.find(prod => prod.ids == producto.ids)
+                let productFound = carrito.find(prod => prod.id == producto.id)
                 productFound.cantidad += 1
                 renderizarCarrito()
                 mostrarToast(productFound.nombre)
                 localStorage.setItem("carrito", JSON.stringify(carrito))
             })
-            let botonReducir = document.getElementById(`reducir-${producto.ids}`);
+            let botonReducir = document.getElementById(`reducir-${producto.id}`);
             botonReducir.addEventListener("click", function () {
-                let productFound = carrito.find(prod => prod.ids == producto.ids)
+                let productFound = carrito.find(prod => prod.id == producto.id)
                 if (productFound.cantidad > 1) {
                     productFound.cantidad -= 1
                     renderizarCarrito()
@@ -84,7 +87,7 @@ function renderizarCarrito() {
                 }
                 localStorage.setItem("carrito", JSON.stringify(carrito))
             })
-            let botonEliminar = document.getElementById(producto.ids);
+            let botonEliminar = document.getElementById(producto.id);
             botonEliminar.addEventListener("click", borrarItemCarrito);
         });
 
@@ -112,11 +115,11 @@ function calcularTotal() {
     for (const producto of carrito) {
         total += producto.precio * producto.cantidad;
     }
-    return total;
+    return total.toLocaleString('de-DE');
 
 }
 function borrarItemCarrito(e) {
-    let productoEliminado = carrito.find(producto => producto.ids == e.target.id)
+    let productoEliminado = carrito.find(producto => producto.id == e.target.id)
     carrito.splice(carrito.indexOf(productoEliminado), 1)
     renderizarCarrito();
     localStorage.setItem("carrito", JSON.stringify(carrito))

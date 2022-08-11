@@ -7,18 +7,20 @@
     font-family: 'Fenix', serif;
 }
 
-
 /* PRODUCTOS */
 
 #productos{
    display: flex;
    justify-content: center;
    flex-direction: column;
+   margin: auto;
    margin-top: 50px;
 }
 
 .imagen{
     height: 200px;
+    width: 150px;
+    object-fit: cover;
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -41,9 +43,21 @@
     font-size: 12.5px;
 }
 
+@media (min-width: 768px) {
+    #productos{
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .imagen{
+        height: 250px;
+        width: 200px
+    }
+}
+
 /* BOTON COMPRAR */
 
-.boton {
+.botonComprar {
     width: 100%;
     font-size: 14px;
     background-color: white;
@@ -51,8 +65,14 @@
     border: 0;
 }
 
-.boton:hover{
+.botonComprar:hover{
     color: rgba(187, 163, 157, 0.692);
+}
+
+@media (min-width: 768px) {
+    .botonComprar{
+        font-size: 16px;
+    }
 }
 
 /* HEADER */
@@ -109,13 +129,50 @@ menu{
     object-fit:cover;
 }
 
-
 .verMas{
     font-size: 16px;
     text-align: center;
     padding: 20px;
 }
 
+@media (min-width: 768px) {
+
+    h1{
+        font-size: 50px;
+    }
+
+    .menuCentro{
+        margin: auto;
+    }
+
+    .itemMenuCentro{
+        padding: 0 40px;
+        font-size: 18px;
+    }
+
+    .itemMenuDerecha{
+        padding: 0 15px;    
+    }
+
+    .iconify{
+        font-size: 20px;
+        margin-bottom: -10px;
+    }
+
+    .banner{
+        height: 400px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .banner{
+        height: 520px;
+    }
+
+    .verMas{
+        font-size: 20px;
+    }
+}
 
 /* FOOTER */
 
@@ -139,7 +196,15 @@ footer{
     justify-content: center;
 }
 
+@media (min-width: 768px) {
+    .tituloFooter{
+        font-size: 35px;
+    }
 
+    .copyright{
+        font-size: 12px;
+    }
+}
 
 /* CARRITO */
 
@@ -148,7 +213,6 @@ footer{
     position: absolute;
     right: -75%;
     top: 50%;
-    background-color: red;
     margin: 0;
 }
 
@@ -157,55 +221,126 @@ footer{
     border: 2px solid #141414;
     background-color: white;
     text-align: center;
-    padding: 10px; 
+    padding: 10px 0 0 0; 
 }
 
 .imagenCarrito{
-    height:60px;
-    margin: 8px;
-}
-
-.productoCarrito{
-    display:flex;
-    background-color: red;
-}
-
-#botonEliminar{
-    font-size: 30px;
+    margin: 0 10px;
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
 }
  
 #item{
-    /* background-color: yellow; */
     display:flex;
+    margin: 20px 0;
 }
 
- /* #cartNombreYPrecio{
-
-}  */
+.cartNombreYCantidad{
+    margin: auto;
+}  
 
 .cartNombre{
     font-size: 12px;
+    margin: 0;
+    padding: 0;
+    text-align: start;
+}
+
+.tituloCantidad{
+    font-size: 12px;
+    margin: 0.5rem 0 0.5rem 0;
+    padding: 0;
+}
+
+.tituloCantidad:hover{
+    cursor:default;
+}
+
+.botonEliminar{
+    height: 40px;
+    margin: 0px;
+    margin-bottom: 20px;
+    padding: 0;
+    text-align: end;
+}
+
+.botonEliminar:hover{
+    cursor:pointer; cursor: hand
 }
 
 .cartPrecio{
-    font-size: 10px;
+    font-size: 12px;
+    margin:0;
+    padding:0;
+    text-align: end;    
 }
 
-.cartCantidad{
-    display:flex;
-} 
-
-.tituloCantidad{
-    font-size: 10px;
+.cartPrecio:hover{
+    cursor: default;
 }
 
-.cartCantidad{
-    padding-left: 5px;
-    align-items: center;
-
-
+.cartEliminarYPrecio{
+    display:inline-block;
+    margin: 0 auto;
 }
 
-.cartEliminar{
-    height: 40px;
+.nroCantidad{
+    font-size: 12px;
+    padding: 5px;
 }
+
+.nroCantidad:hover{
+    cursor:default;
+}
+
+.cartBoton{
+    margin-bottom: -1rem;
+    border:0.5px solid #141414b9;
+    padding: 0 5px;
+}
+
+.cartBoton:hover{
+    background-color: black;
+    color:white;
+    cursor:pointer; cursor: hand
+}
+
+#total{
+    margin: 1rem 0 0 0;
+}
+
+#total:hover{
+    cursor: hand !important;
+}
+
+#botonTotal{
+    padding: 2px 10px;
+    font-size: 14px;
+    background-color: white;
+    border: 1px solid #141414;
+}
+
+#botonTotal:hover{
+    background-color: black;
+    color:white;
+}
+
+@media (min-width: 768px) {
+    .cartNombre{
+        font-size: 15px;
+    }
+
+    .tituloCantidad{
+        font-size: 14px;
+    }
+
+    .nroCantidad{
+        font-size: 15px;
+    }
+
+    .cartPrecio{
+        font-size: 14px;
+    }
+}
+
