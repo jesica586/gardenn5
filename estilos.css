@@ -38,9 +38,17 @@
     font-size: 18px;
 }
 
+.nombreProducto:hover{
+    cursor:default;
+}
+
 .precio{
     text-align: center;
     font-size: 12.5px;
+}
+
+.precio:hover{
+    cursor:default;
 }
 
 @media (min-width: 768px) {
@@ -85,7 +93,11 @@ h1{
     text-align:center;
     color: #141414;
     font-size: 35px;
-    margin: 20px 0
+    margin: 20px 0;
+}
+
+h1:hover{
+    cursor:pointer; cursor:hand;
 }
 
 menu{
@@ -104,6 +116,7 @@ menu{
 .itemMenuCentro{
     font-size: 14px;
     padding:0 8px;
+    color:#141414;
 }
 
 .menuDerecha{
@@ -133,6 +146,11 @@ menu{
     font-size: 16px;
     text-align: center;
     padding: 20px;
+    color:#141414;
+}
+
+.verMas:hover{
+    cursor:hand; cursor: pointer;
 }
 
 @media (min-width: 768px) {
@@ -188,12 +206,20 @@ footer{
     padding: 20px
 }
 
+.tituloFooter:hover{
+    cursor:default;
+}
+
 .copyright{
     color:white;
     font-size: 9px;
     display:flex;
     margin: 0;
     justify-content: center;
+}
+
+.copyright:hover{
+    cursor:default;
 }
 
 @media (min-width: 768px) {
