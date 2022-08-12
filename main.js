@@ -126,8 +126,11 @@ function renderizarCarrito() {
         botonTotal.addEventListener("click", function () {
 
             Swal.fire({
-                title: "GRACIAS POR TU COMPRA!",
-                confirmButtonText: "ACEPTAR"
+                title: "¡GRACIAS POR TU COMPRA!",
+                confirmButtonText: `ACEPTAR`,
+                background: "white",
+                color: "#141414",
+                confirmButtonColor: '#141414',
             })
         })
     }

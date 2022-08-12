@@ -348,6 +348,13 @@ footer {
     color: white;
 }
 
+.botonConfirmarCompra{
+    background-color: #141414;
+    color: white;
+}
+
+
+
 @media (min-width: 768px) {
     .cartNombre {
         font-size: 15px;
@@ -368,16 +375,3 @@ footer {
 
 
 
-
-
-.d-flex {
-    background-color: red;
-    height: 20px;
-    margin-bottom: -50px;
-}
-
-
-.form-control {
-    background-color: yellow;
-    vertical-align: center;
-}
