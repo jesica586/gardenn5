@@ -1,9 +1,11 @@
 let productos = [];
+let productosFiltrados = []
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 let divisa = "$";
 
 function renderizarProductos() {
-    for (const producto of productos) {
+
+    for (const producto of productosFiltrados) {
         let seccionProductos = document.getElementById("productos");
         let card = document.createElement("div");
         card.innerHTML = `
@@ -11,13 +13,32 @@ function renderizarProductos() {
         <img src= "${producto.imagen}" class='imagen' alt='${producto.nombre}'> 
         <h5 class='nombreProducto'>${producto.nombre}</h5>
         <p class='precio'>$${producto.precio.toLocaleString('de-DE')}</p>
-        <input class='botonComprar' id='${producto.id}' type='button' value='COMPRAR'>
+        <input class='botonComprar' id='${producto.id}' type='button' value='AGREGAR'>
         </div>`;
         seccionProductos.appendChild(card);
 
         let botones = document.getElementById(producto.id);
         botones.addEventListener("click", agregarProductoAlCarrito);
     }
+}
+
+function mostrarClothes() { 
+    let seccionProductos = document.getElementById("productos");
+    seccionProductos.innerHTML = "";   
+    productosFiltrados = [...productos.filter(producto=> producto.categoria === "clothes" )]
+    console.log("productosFiltrados: ", productosFiltrados)
+    renderizarProductos()
+    let banner = document.getElementById("banner");
+    banner.parentNode.removeChild(banner);
+}
+function mostrarAccesories() {  
+    let seccionProductos = document.getElementById("productos");
+    seccionProductos.innerHTML = "";  
+    productosFiltrados = [...productos.filter(producto=> producto.categoria === "accesories" )]
+    console.log("productosFiltrados: ", productosFiltrados)
+    renderizarProductos()
+    let banner = document.getElementById("banner");
+    banner.parentNode.removeChild(banner);
 }
 
 function agregarProductoAlCarrito(e) {
@@ -55,7 +76,7 @@ function renderizarCarrito() {
                     </div>
                 </div>
             <div class="cartEliminarYPrecio">
-                <img class="botonEliminar" src="imagenes/eliminar.jpg" id="${producto.id}">
+                <img class="botonEliminar" src="imagenes/eliminar.svg" id="${producto.id}">
                 <p class="cartPrecio">$${producto.precio.toLocaleString('de-DE')}</p>
             </div>
             `;
@@ -135,10 +156,12 @@ function mostrarToast(nombre) {
         }
     }).showToast();
 }
+
 fetch("json/productos.json")
     .then(response => response.json())
     .then(arrayDeProductos => {
         productos = [...arrayDeProductos]
+        productosFiltrados = [...productos]
         renderizarProductos();
         renderizarCarrito();
     })
