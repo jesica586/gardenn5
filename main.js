@@ -26,19 +26,21 @@ function mostrarClothes() {
     let seccionProductos = document.getElementById("productos");
     seccionProductos.innerHTML = "";   
     productosFiltrados = [...productos.filter(producto=> producto.categoria === "clothes" )]
-    console.log("productosFiltrados: ", productosFiltrados)
     renderizarProductos()
-    let banner = document.getElementById("banner");
-    banner.parentNode.removeChild(banner);
+    if(banner){
+        let banner = document.getElementById("banner");
+        banner.parentNode.removeChild(banner);
+    }
 }
 function mostrarAccesories() {  
     let seccionProductos = document.getElementById("productos");
     seccionProductos.innerHTML = "";  
     productosFiltrados = [...productos.filter(producto=> producto.categoria === "accesories" )]
-    console.log("productosFiltrados: ", productosFiltrados)
     renderizarProductos()
-    let banner = document.getElementById("banner");
-    banner.parentNode.removeChild(banner);
+    if(banner){
+        let banner = document.getElementById("banner");
+        banner.parentNode.removeChild(banner);
+    }
 }
 
 function agregarProductoAlCarrito(e) {
@@ -77,7 +79,7 @@ function renderizarCarrito() {
                 </div>
             <div class="cartEliminarYPrecio">
                 <img class="botonEliminar" src="imagenes/eliminar.svg" id="${producto.id}">
-                <p class="cartPrecio">$${producto.precio.toLocaleString('de-DE')}</p>
+                <p class="cartPrecio">$${producto.precio}</p>
             </div>
             `;
 
