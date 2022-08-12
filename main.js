@@ -27,8 +27,8 @@ function mostrarClothes() {
     seccionProductos.innerHTML = "";   
     productosFiltrados = [...productos.filter(producto=> producto.categoria === "clothes" )]
     renderizarProductos()
+    let banner = document.getElementById("banner");
     if(banner){
-        let banner = document.getElementById("banner");
         banner.parentNode.removeChild(banner);
     }
 }
@@ -37,8 +37,8 @@ function mostrarAccesories() {
     seccionProductos.innerHTML = "";  
     productosFiltrados = [...productos.filter(producto=> producto.categoria === "accesories" )]
     renderizarProductos()
+    let banner = document.getElementById("banner");
     if(banner){
-        let banner = document.getElementById("banner");
         banner.parentNode.removeChild(banner);
     }
 }
