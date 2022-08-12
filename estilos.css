@@ -113,7 +113,7 @@ menu {
 .menuCentro {
     display: flex;
     margin: 0 0 0 10px;
-    padding: 0;    
+    padding: 0;
 }
 
 .itemMenuCentro {
@@ -348,12 +348,10 @@ footer {
     color: white;
 }
 
-.botonConfirmarCompra{
+.botonConfirmarCompra {
     background-color: #141414;
     color: white;
 }
-
-
 
 @media (min-width: 768px) {
     .cartNombre {
@@ -372,6 +370,3 @@ footer {
         font-size: 14px;
     }
 }
-
-
-

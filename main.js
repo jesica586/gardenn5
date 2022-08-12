@@ -3,8 +3,18 @@ let productosFiltrados = []
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 let divisa = "$";
 
-function renderizarProductos() {
 
+fetch("json/productos.json")
+    .then(response => response.json())
+    .then(arrayDeProductos => {
+        productos = [...arrayDeProductos]
+        productosFiltrados = [...productos]
+        renderizarProductos();
+        renderizarCarrito();
+    })
+
+//mostrar productos en el index
+function renderizarProductos() {
     for (const producto of productosFiltrados) {
         let seccionProductos = document.getElementById("productos");
         let card = document.createElement("div");
@@ -17,31 +27,37 @@ function renderizarProductos() {
         </div>`;
         seccionProductos.appendChild(card);
 
+        //se agregan los productos al carrito
         let botones = document.getElementById(producto.id);
         botones.addEventListener("click", agregarProductoAlCarrito);
     }
 }
 
-function mostrarClothes() { 
+
+//filtrar ropa en la seccion clothes
+function mostrarClothes() {
     let seccionProductos = document.getElementById("productos");
-    seccionProductos.innerHTML = "";   
-    productosFiltrados = [...productos.filter(producto=> producto.categoria === "clothes" )]
+    seccionProductos.innerHTML = "";
+    productosFiltrados = [...productos.filter(producto => producto.categoria === "clothes")]
     renderizarProductos()
     let banner = document.getElementById("banner");
-    if(banner){
+    if (banner) {
         banner.parentNode.removeChild(banner);
     }
 }
-function mostrarAccesories() {  
+
+//filtrar accesorios en la seccion accesories
+function mostrarAccesories() {
     let seccionProductos = document.getElementById("productos");
-    seccionProductos.innerHTML = "";  
-    productosFiltrados = [...productos.filter(producto=> producto.categoria === "accesories" )]
+    seccionProductos.innerHTML = "";
+    productosFiltrados = [...productos.filter(producto => producto.categoria === "accesories")]
     renderizarProductos()
     let banner = document.getElementById("banner");
-    if(banner){
+    if (banner) {
         banner.parentNode.removeChild(banner);
     }
 }
+
 
 function agregarProductoAlCarrito(e) {
     let productoSeleccionado = productos.find(producto => producto.id == e.target.id)
@@ -51,11 +67,14 @@ function agregarProductoAlCarrito(e) {
     } else {
         carrito.push({ ...productoSeleccionado, cantidad: 1 })
     }
+
     mostrarToast(productoSeleccionado.nombre)
     localStorage.setItem("carrito", JSON.stringify(carrito))
     renderizarCarrito();
 }
 
+
+//mostrar productos en el carrito
 function renderizarCarrito() {
     let misProductos = document.getElementById("misProductos")
     misProductos.textContent = '';
@@ -85,6 +104,8 @@ function renderizarCarrito() {
 
             misProductos.appendChild(cardProducto);
 
+
+            //botones agregar o quitar cantidad del producto
             let botonAgregar = document.getElementById(`agregar-${producto.id}`);
             botonAgregar.addEventListener("click", function () {
                 let productFound = carrito.find(prod => prod.id == producto.id)
@@ -110,10 +131,14 @@ function renderizarCarrito() {
                 }
                 localStorage.setItem("carrito", JSON.stringify(carrito))
             })
+
+            //eliminar producto del carrito
             let botonEliminar = document.getElementById(producto.id);
             botonEliminar.addEventListener("click", borrarItemCarrito);
         });
 
+
+        //seccion precio total y boton de comprar
         let total = document.createElement("div");
         total.id = "total";
         total.innerHTML = `
@@ -125,6 +150,7 @@ function renderizarCarrito() {
         botonTotal = document.getElementById("botonTotal");
         botonTotal.addEventListener("click", function () {
 
+            //SWEET ALERT
             Swal.fire({
                 title: "¡GRACIAS POR TU COMPRA!",
                 confirmButtonText: `ACEPTAR`,
@@ -136,14 +162,6 @@ function renderizarCarrito() {
     }
 }
 
-function calcularTotal() {
-    let total = 0;
-    for (const producto of carrito) {
-        total += producto.precio * producto.cantidad;
-    }
-    return total.toLocaleString('de-DE');
-
-}
 function borrarItemCarrito(e) {
     let productoEliminado = carrito.find(producto => producto.id == e.target.id)
     carrito.splice(carrito.indexOf(productoEliminado), 1)
@@ -151,6 +169,17 @@ function borrarItemCarrito(e) {
     localStorage.setItem("carrito", JSON.stringify(carrito))
 }
 
+//Funcion que calcula el total del precio
+function calcularTotal() {
+    let total = 0;
+    for (const producto of carrito) {
+        total += producto.precio * producto.cantidad;
+    }
+    return total.toLocaleString('de-DE');
+}
+
+
+//Funcion de TOASTIFY
 function mostrarToast(nombre) {
     Toastify({
         text: `Agregaste ${nombre} al carrito`,
@@ -161,12 +190,3 @@ function mostrarToast(nombre) {
         }
     }).showToast();
 }
-
-fetch("json/productos.json")
-    .then(response => response.json())
-    .then(arrayDeProductos => {
-        productos = [...arrayDeProductos]
-        productosFiltrados = [...productos]
-        renderizarProductos();
-        renderizarCarrito();
-    })
