@@ -228,10 +228,10 @@ footer {
 
 /* CARRITO */
 
-.collapse {
+.collapse, .collapsing {
     width: 320px;
     position: absolute;
-    right: -75%;
+    right: -90%;
     top: 50%;
 }
 
